@@ -15,6 +15,11 @@ debug = DebugToolbarExtension(app)
 connect_db(app)
 db.create_all()
 
+@app.route('/')
+def home_page():
+    """home page"""
+    return render_template("home.html")
+
 @app.route('/api/cupcakes')
 def list_cupcakes():
     """Show home page Listing Pets"""
@@ -34,8 +39,9 @@ def create_cupcake():
     size=request.json["size"]
     rating=request.json["rating"]
     image=request.json["image"]
+    image=image if image else None
     new_cupcake = Cupcake(flavor=flavor, size=size, rating=rating, image=image)
-
+    
     db.session.add(new_cupcake)
     db.session.commit()
     respons_json = jsonify(cupcake = new_cupcake.serialize())
